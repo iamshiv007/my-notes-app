@@ -8,6 +8,17 @@ exports.createUser = (req, res) => {
     .catch(err => res.status(500).json(err.message))
 } 
 
+// Log In
+exports.logInUser = async (req, res) => {
+    const { email, password } = req.body
+
+        const userExist = await User.findOne({email})
+       if(!userExist) return res.status(400).json({success:false, message:'user not found'})
+       if(userExist.password === password) {
+        res.status(200).json({success:true, message:"Loged In"})
+       }
+
+}
 // Get all Users
 exports.getAllUser = (req, res) => {
     User.find()
@@ -26,7 +37,7 @@ exports.updateUser = async (req, res) => {
     }
     
      User.findByIdAndUpdate(req.params.id, req.body)
-    .then(user => res.status(201).json({success: true, user}))
+    .then(user => res.status(200).json({success: true, user}))
     .catch(err => res.status(500).json(err.message))
 
     } catch (error) {
@@ -47,7 +58,7 @@ exports.deleteUser = async (req, res) => {
     }
     
       User.findByIdAndDelete(req.params.id)
-      .then(user => res.status(201).json({success: true, user}))
+      .then(user => res.status(200).json({success: true, user}))
       .catch(err => res.status(500).json(err.message))
 
     } catch (error) {
@@ -70,7 +81,7 @@ exports.getOneUser = async (req, res) => {
     }
     
       User.findById(req.params.id)
-      .then(user => res.status(201).json({success: true, user}))
+      .then(user => res.status(200).json({success: true, user}))
       .catch(err => res.status(500).json(err.message))
     } catch (error) {
         res.status(500).send(error.message)
